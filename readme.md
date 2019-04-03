@@ -2,9 +2,9 @@
 
 Edit this to setting.py
 
-EMAIL_HOST_USER = 'enter_your_email'
+`EMAIL_HOST_USER = 'enter_your_email'`
 
-EMAIL_HOST_PASSWORD = 'enter_your_password'
+`EMAIL_HOST_PASSWORD = 'enter_your_password'`
 
 Run Command
 > pip install -r requirements.txt
