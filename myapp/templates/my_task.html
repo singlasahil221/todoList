@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+
+{% block title%}
+My tasks
+{% endblock %}
+
+
+
+
+{% block body %}
+
+<div class="container mt-5">
+
+<table id="tasks" class="table mt-5">
+	<thead class="thead-light">
+
+	<tr>
+	<th scope="col">#</th>
+	<th scope="col">Time</th>
+	<th scope="col">Description</th>
+	<th scope="col">Status</th>
+	</tr>
+	</thead>
+	<tbody id="task_table_body">
+		
+	</tbody>
+
+</table>
+</div>
+<script>
+
+$(document).ready(function() {
+  $.ajax({
+  data: {}, // get the form data
+  type: 'GET', // GET or POST
+  url: '/task/',
+  dataType : "json",
+  success: function(data) { 
+  	$.each(data,function ( index, repo ) {
+  		console.log(index,repo.id);
+                $('#task_table_body').append(`<tr><th scope="row">${index}</th><td>${repo.scheduled_at}</td><td>${repo.description}</td><td>${repo.is_completed}<a href="/my-task/${repo.id}/"><button class="btn btn-outline-success">Show Task</button></a></td><tr>`);
+            });
+ },
+  error: function(e, x, r) { // on error..
+            $("#tasks").innerHTML("Can not load at this moment.");
+}
+});
+});
+</script>
+{% endblock %}

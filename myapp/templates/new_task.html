@@ -1,0 +1,53 @@
+
+{% extends 'base.html'%}
+
+{% block title%}
+Add New Task
+{% endblock %}
+
+
+
+
+{% block body %}
+<div class="container mt-5">
+<form method="put" action="/task/" class="data_edit col-lg-offset-4 col-lg-4 mt-5" >
+	{%csrf_token%}
+Status : 
+<input type="checkbox" name="is_completed" >
+<br>
+Description : 
+<input type="text" name="description" ><br>
+Scheduled Time : <input type="DateTime-local" name="scheduled_at">
+<input type="submit" value="save">
+</form>
+<div id="success_div" >
+       <div class="alert alert-success success" style="display: none;"> Added new task </div>
+       <div class="alert alert-warning failure" style="display: none;"> Task Cannot be added.</div>
+</div>
+</div>
+
+<script>
+$('form').submit(function(e){
+  e.preventDefault();
+  $.ajax({
+  data: $(this).serialize(), // get the form data
+  type: $(this).attr('method'), // GET or POST
+  url: $(this).attr('action'),
+  headers:{ 'X-CSRF-TOKEN': "{{csrf_token}}" },
+
+  dataType : "json",
+  success: function(data) { 
+    console.log(data);
+    $.each(data,function ( index, repo ) {
+        $( "div.success" ).fadeIn( 300 ).delay( 2500 ).fadeOut( 400 );
+            });
+ },
+  error: function(e, x, r) { // on error..
+  	console.log(e);
+            $( "div.failure" ).fadeIn( 300 ).delay( 2500 ).fadeOut( 400 );
+}
+});
+return false;
+});
+</script>
+{% endblock %}

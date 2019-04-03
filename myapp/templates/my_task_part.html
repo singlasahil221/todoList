@@ -1,0 +1,79 @@
+{% extends 'base.html'%}
+
+{% block title%}
+Task
+{% endblock %}
+
+
+
+
+{% block body %}
+<div class="container col-lg-4 col-lg-offset-4 mt-5">
+<center><h1 class="mt-5">Task</h1></center>
+<div class="data_display mt-5"></div>
+<button class="btn btn-primary" id="edit">Edit</button>
+<form method="put" class="data_edit" style="display: none;">
+	{%csrf_token%}
+</form>
+</div>
+
+
+<script>
+var x = location.href.split('/')[4];
+$(document).ready(function() {
+	
+	console.log(x);
+  $.ajax({
+  data: {}, // get the form data
+  type: 'GET', // GET or POST
+  url: '/task/'+x+'/',
+  dataType : "json",
+  success: function(data) { 
+  	console.log(data[0]);
+  	$.each(data,function ( index, repo ) {
+                $('.data_display').append(`<h2>id = ${repo.id}<br>Scheduled for : ${repo.scheduled_at}<br>Task Description: <br>${repo.description}<br>Task Status : ${repo.is_completed}</h2>`);
+                $('.data_edit').append(`Status : <input type="checkbox" name="is_completed" value="${repo.is_completed}"><br>Description : <input type="text" name="description" value="${repo.description}"><br>Scheduled Time : <input type="DateTime-local" name="scheduled_at" value="${repo.scheduled_at}"><input type="submit" value="save">`);
+                $('.data_edit').css("display","none");
+            });
+ },
+  error: function(e, x, r) { // on error..
+  	console.log(e,x,r);
+            $("#tasks").html("Can not load at this moment.");
+}
+});
+});
+
+
+$("#edit").click(function(){
+	$('.data_display').css("display", "none");
+	$('.data_edit').css("display","block")
+})
+
+
+
+$('form').submit(function(e){
+  e.preventDefault();
+  $.ajax({
+  data: $(this).serialize(), // get the form data
+  type: $(this).attr('method'), // GET or POST
+  url: '/task/'+x+'/',
+  dataType : "json",
+  success: function(data) { 
+    console.log(data);
+    $.each(data,function ( index, repo ) {
+                $('.data_display').html(`<h2>id = ${repo.id}<br>Scheduled for : ${repo.scheduled_at}<br>Task Description: <br>${repo.description}<br>Task Status : ${repo.is_completed}</h2>`);
+                $('.data_edit').html(`Status : <input type="checkbox" name="is_completed" value="${repo.is_completed}"><br>Description : <input type="text" name="description" value="${repo.description}"><br>Scheduled Time : <input type="DateTime-local" name="scheduled_at" value="${repo.scheduled_at}"><input type="submit" value="save">`);
+                $('.data_edit').css("display","none");
+            });
+ },
+  error: function(e, x, r) { // on error..
+  	console.log(e);
+            $( "div.failure" ).fadeIn( 300 ).delay( 2500 ).fadeOut( 400 );
+}
+});
+return false;
+});
+
+</script>
+
+{% endblock %}
