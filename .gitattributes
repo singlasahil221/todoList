@@ -1,4 +1,3 @@
 * text=auto
-hackon/staticfiles/* linguist-vendored
-hackon/static/* linguist-vendored
+static/* linguist-vendored
 myapp/templates/* linguist-vendored
